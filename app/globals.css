@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f5f3ee;
+  --ink: #1c1b19;
+  --muted: #77736a;
+  --accent: #e5532d;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-sans-tc), "Microsoft JhengHei", sans-serif;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans-tc), "Microsoft JhengHei", sans-serif;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* 首頁錨點：避開固定在上方的導覽列，並平滑捲動 */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+/* 螢光筆標記：文字下半部墊一條強調色 */
+.marker {
+  background: linear-gradient(transparent 60%, color-mix(in srgb, var(--accent) 38%, transparent) 60%, color-mix(in srgb, var(--accent) 38%, transparent) 90%, transparent 90%);
+  padding: 0 0.1em;
+}
+
+/* 首頁插圖緩慢漂浮 */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-10px) rotate(var(--r, 0deg)); }
+}
+.float { animation: float 6s ease-in-out infinite; }
+
+/* ---- 抽獎轉盤的動畫 ---- */
+/* 外圈的小圓點：兩組交替亮，轉動時閃得更快 */
+@keyframes bulb {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+.bulb-a { animation: bulb 1.4s ease-in-out infinite; }
+.bulb-b { animation: bulb 1.4s ease-in-out infinite 0.7s; }
+[data-spinning="true"] .bulb-a { animation-duration: 0.36s; }
+[data-spinning="true"] .bulb-b { animation-duration: 0.36s; animation-delay: 0.18s; }
+
+/* 中獎時的彩帶 */
+@keyframes confetti {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)) rotate(var(--r)); opacity: 0; }
+}
+.confetti-piece { animation: confetti 2s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+
+/* 好運抽籤：搖籤筒、籤紙展開 */
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg) translateX(0); }
+  15% { transform: rotate(-9deg) translateX(-4px); }
+  30% { transform: rotate(8deg) translateX(4px); }
+  45% { transform: rotate(-7deg) translateX(-2px); }
+  60% { transform: rotate(7deg) translateX(3px); }
+  75% { transform: rotate(-4deg) translateX(-1px); }
+}
+.shake { animation: shake 0.5s ease-in-out infinite; transform-origin: 50% 92%; }
+
+@keyframes slip-in {
+  from { opacity: 0; transform: translateY(28px) scaleY(0.72); }
+  to { opacity: 1; transform: none; }
+}
+.slip-in { animation: slip-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); transform-origin: top center; }
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+.pop { animation: pop 0.35s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bulb-a, .bulb-b { animation: none; opacity: 0.9; }
+  .confetti-piece { display: none; }
+  .pop, .shake, .slip-in, .float { animation: none; }
+  html { scroll-behavior: auto; }
+}
