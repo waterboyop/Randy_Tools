@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__trend-core__tc_get_daily_report",
+      "PowerShell(Get-WinEvent *)"
+    ]
+  }
+}
